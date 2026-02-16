@@ -1,6 +1,6 @@
 # File Organizer
 
-Helps you organize file systems with YAML-based rules for automated operations.
+AI Agent Skill - Helps organize files, move files, clean up downloads, and tag files.
 
 ## Features
 
@@ -10,122 +10,34 @@ Helps you organize file systems with YAML-based rules for automated operations.
 - **Duplicate Detection**: Find duplicate files by content/name and process by rules
 - **AI Insights**: Analyze directories and intelligently recommend organization rules
 
-## Quick Start
+## Installation
 
-### Requirements
+### Manual Install
 
-- macOS
-- `tag` command-line tool
+1. Clone the repo to your Skills directory:
+
+```bash
+git clone https://github.com/AlienHub/file-organizer.git ~/.claude/skills/file-organizer
+```
+
+2. Install `tag` command (macOS):
 
 ```bash
 brew install tag
 ```
 
-### Basic Usage
+## Usage
 
-#### Organize Downloads
+### Trigger
+
+Just tell Claude:
 
 ```
-"帮我整理下载目录" (Help me organize downloads)
-→ Scan ~/Downloads
-→ Apply rules, show preview
-→ You say "执行" (execute) → Execute operations
+"帮我整理下载目录" (organize my downloads)
+"清理桌面的旧文件" (clean old files on desktop)
+"给这些文件打上标签" (tag these files)
+"检查下载目录的重复文件" (check for duplicates in downloads)
 ```
-
-#### Tag Files
-
-```bash
-# Red "To Delete" tag
-tag --add "To Delete"$'\n'"6" file.pdf
-
-# Blue "Invoice" tag
-tag --add "Invoice"$'\n'"4" invoice.pdf
-```
-
-## Configuration File
-
-Location: `~/.file-organizer/config.yaml`
-
-```yaml
-# Preview mode (true=preview, false=execute)
-dry_run: true
-
-# Scan directories
-scan_paths:
-  - ~/Downloads
-  - ~/Documents
-  - ~/Desktop
-
-# Log level
-log_level: info
-```
-
-## Rule Syntax
-
-### move.yaml - Move Rules
-
-```yaml
-rules:
-  - name: "WeChat PDF Organization"
-    condition:
-      path: "~/Downloads"
-      extension: ["pdf", "doc", "docx"]
-      pattern: "WeChat|微信"
-    action:
-      move: "~/Documents/WeChat"
-      create_if_missing: true
-      tag:
-        color: "blue"
-        label: "WeChat"
-```
-
-### tag.yaml - Tag Rules
-
-```yaml
-rules:
-  - name: "Large file tag"
-    condition:
-      size_gt: 100MB
-    action:
-      tag:
-        color: "red"
-        label: "Large File"
-```
-
-### duplicate.yaml - Duplicate Detection Rules
-
-```yaml
-rules:
-  - name: "Duplicate handling"
-    check_by: "content"
-    action:
-      keep: "newest"
-      tag_duplicates: true
-      duplicate_label: "Duplicate"
-```
-
-## Tag Colors
-
-| Color Code | Color |
-|------------|-------|
-| 1 | gray |
-| 2 | green |
-| 3 | purple |
-| 4 | blue |
-| 5 | yellow |
-| 6 | red |
-| 7 | orange |
-
-## Trigger Methods
-
-### Auto Trigger
-
-- "整理下载目录" (organize downloads)
-- "整理桌面" (organize desktop)
-- "移动文件" (move files)
-- "清理重复文件" (clean duplicates)
-- "给文件打标签" (tag files)
-- "分析一下我的下载目录" (analyze my downloads)
 
 ### Manual Invocation
 
@@ -133,6 +45,79 @@ rules:
 /file-organizer
 ```
 
-## More Examples
+### Examples
 
-See [SKILL.md](./SKILL.md) for detailed documentation.
+#### Organize Downloads
+
+```
+"帮我整理下载目录"
+→ Scan ~/Downloads
+→ Apply rules, show preview
+→ You say "执行" → Execute
+```
+
+#### Tag Files
+
+```
+"标记下载目录超过180天的文件为旧文件"
+→ Scan files older than 180 days
+→ Tag with purple "旧文件" label
+```
+
+#### Clean Duplicates
+
+```
+"检查下载目录的重复文件"
+→ Detect by content/name
+→ Show duplicate list
+→ You choose which to keep
+```
+
+## Tag Colors
+
+| Color | Code | Usage |
+|-------|------|-------|
+| Gray | 1 | General |
+| Green | 2 | Keep/Important |
+| Purple | 3 | Old files |
+| Blue | 4 | Work-related |
+| Yellow | 5 | Warning |
+| Red | 6 | To delete |
+| Orange | 7 | Later |
+
+## Configuration (Optional)
+
+Create `~/.file-organizer/config.yaml`:
+
+```yaml
+# Preview mode
+dry_run: true
+
+# Directories to scan
+scan_paths:
+  - ~/Downloads
+  - ~/Documents
+  - ~/Desktop
+
+log_level: info
+```
+
+## Rules (Optional)
+
+Create YAML rules in `~/.file-organizer/rules/`:
+
+- `move.yaml` - Move rules
+- `tag.yaml` - Tag rules
+- `rename.yaml` - Rename rules
+- `duplicate.yaml` - Duplicate detection
+
+See [SKILL.md](./SKILL.md) for details.
+
+## Requirements
+
+- macOS
+- Claude Code CLI
+
+## License
+
+MIT

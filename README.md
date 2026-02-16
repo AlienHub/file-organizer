@@ -1,6 +1,6 @@
 # File Organizer
 
-帮助你整理文件系统，基于 YAML 规则自动化执行操作。
+AI Agent Skill - 帮助整理文件、移动文件、清理下载目录、给文件打标签。
 
 ## 功能
 
@@ -10,18 +10,47 @@
 - **重复检测**：按内容/名称检测重复文件，按规则处理
 - **AI Insights**：分析目录，智能推荐整理规则
 
-## 快速开始
+## 安装
 
-### 环境要求
+### 方式一：手动安装
 
-- macOS
-- `tag` 命令行工具
+1. 克隆仓库到 Skills 目录：
+
+```bash
+git clone https://github.com/AlienHub/file-organizer.git ~/.claude/skills/file-organizer
+```
+
+2. 确保已安装 `tag` 命令（macOS）：
 
 ```bash
 brew install tag
 ```
 
-### 基本使用
+### 方式二：发布到 Skill Market
+
+（待完善）
+
+## 使用
+
+### 触发方式
+
+直接告诉 Claude：
+
+```
+"帮我整理下载目录"
+"清理桌面的旧文件"
+"给这些文件打上标签"
+"检查下载目录的重复文件"
+"移动微信的 PDF 到 Documents"
+```
+
+### 手动调用
+
+```
+/file-organizer
+```
+
+### 示例
 
 #### 整理下载目录
 
@@ -34,17 +63,36 @@ brew install tag
 
 #### 给文件打标签
 
-```bash
-# 红色"待删除"标签
-tag --add "待删除"$'\n'"6" file.pdf
-
-# 蓝色"发票"标签
-tag --add "发票"$'\n'"4" invoice.pdf
 ```
+"把下载目录的旧文件标记为待删除"
+→ 扫描超过180天的文件
+→ 打上紫色"旧文件"标签
+```
+
+#### 清理重复文件
+
+```
+"检查下载目录的重复文件"
+→ 按内容/名称检测
+→ 显示重复文件列表
+→ 你选择保留哪个
+```
+
+## 标签颜色
+
+| 颜色 | 代码 | 用途 |
+|------|------|------|
+| 灰色 | 1 | 一般标记 |
+| 绿色 | 2 | 保留/重要 |
+| 紫色 | 3 | 旧文件 |
+| 蓝色 | 4 | 工作相关 |
+| 黄色 | 5 | 警告 |
+| 红色 | 6 | 待删除 |
+| 橙色 | 7 | 稍后处理 |
 
 ## 配置文件
 
-位置：`~/.file-organizer/config.yaml`
+可选：创建 `~/.file-organizer/config.yaml` 自定义配置：
 
 ```yaml
 # 预览模式 (true=预览, false=执行)
@@ -60,79 +108,22 @@ scan_paths:
 log_level: info
 ```
 
-## 规则语法
+## 规则文件
 
-### move.yaml - 移动规则
+可选：创建 YAML 规则自动执行：
 
-```yaml
-rules:
-  - name: "微信 PDF 整理"
-    condition:
-      path: "~/Downloads"
-      extension: ["pdf", "doc", "docx"]
-      pattern: "WeChat|微信"
-    action:
-      move: "~/Documents/WeChat"
-      create_if_missing: true
-      tag:
-        color: "blue"
-        label: "微信"
-```
-
-### tag.yaml - 标签规则
-
-```yaml
-rules:
-  - name: "大文件标签"
-    condition:
-      size_gt: 100MB
-    action:
-      tag:
-        color: "red"
-        label: "大文件"
-```
-
-### duplicate.yaml - 重复检测规则
-
-```yaml
-rules:
-  - name: "重复处理"
-    check_by: "content"
-    action:
-      keep: "newest"
-      tag_duplicates: true
-      duplicate_label: "重复"
-```
-
-## 标签颜色
-
-| 颜色代码 | 颜色 |
-|---------|------|
-| 1 | 灰 |
-| 2 | 绿 |
-| 3 | 紫 |
-| 4 | 蓝 |
-| 5 | 黄 |
-| 6 | 红 |
-| 7 | 橙 |
-
-## 触发方式
-
-### 自动触发
-
-- "整理下载目录"
-- "整理桌面"
-- "移动文件"
-- "清理重复文件"
-- "给文件打标签"
-- "分析一下我的下载目录"
-
-### 手动调用
-
-```
-/file-organizer
-```
-
-## 更多用法
+- `~/.file-organizer/rules/move.yaml` - 移动规则
+- `~/.file-organizer/rules/tag.yaml` - 标签规则
+- `~/.file-organizer/rules/rename.yaml` - 重命名规则
+- `~/.file-organizer/rules/duplicate.yaml` - 重复检测规则
 
 详见 [SKILL.md](./SKILL.md)
+
+## 环境
+
+- macOS
+- Claude Code CLI
+
+## License
+
+MIT
