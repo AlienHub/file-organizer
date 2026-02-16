@@ -1,15 +1,6 @@
 ---
 name: file-organizer
-description: Organize files, move files, clean up downloads, categorize files, add tags, rename files, detect duplicates
-match:
-  - "整理"
-  - "移动文件"
-  - "清理"
-  - "文件分类"
-  - "打标签"
-  - "organize"
-  - "clean up"
-  - "tidy"
+description: Use when user wants to organize files, move files, clean up downloads, categorize files, add tags, rename files, or detect duplicates - provides file organization with YAML-based rules
 allowed-tools: Bash, Glob, Read, AskUserQuestion
 ---
 
@@ -45,14 +36,14 @@ Use the `tag` command-line tool for tag operations.
 
 ```bash
 # Add tag (color + text)
-# Format: tag --add "label"$'\\n'"color_code" file
+# Format: tag --add "label"$'\n'"color_code" file
 # Color codes: 1=gray, 2=green, 3=purple, 4=blue, 5=yellow, 6=red, 7=orange
 
 # Example: Red "To Delete" tag
-tag --add "To Delete"$'\\n'"6" /Users/alien/Downloads/README.md
+tag --add "To Delete"$'\n'"6" /Users/alien/Downloads/README.md
 
 # Example: Blue "Invoice" tag
-tag --add "Invoice"$'\\n'"4" file.pdf
+tag --add "Invoice"$'\n'"4" file.pdf
 
 # List tags on a file
 tag --list file
@@ -66,7 +57,7 @@ tag --usage
 When executing tag operations, use the `tag` command:
 
 ```bash
-tag --add "label"$'\\n'"color_code" <file_path>
+tag --add "label"$'\n'"color_code" <file_path>
 ```
 
 ## Trigger Methods
